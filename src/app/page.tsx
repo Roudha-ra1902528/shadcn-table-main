@@ -40,7 +40,7 @@ export default async function IndexPage(props: IndexPageProps) {
   return (
     <>
       <InquiryDialog />
-
+hi
       <Shell className="gap-2">
         <FeatureFlagsProvider>
           <React.Suspense
