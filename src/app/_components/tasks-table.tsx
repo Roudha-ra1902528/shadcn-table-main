@@ -36,7 +36,6 @@ interface TasksTableProps {
 }
 
 export function TasksTable({ promises }: TasksTableProps) {
-  const { enableAdvancedFilter, filterFlag } = useFeatureFlags();
 
   const [
     { data, pageCount },
@@ -62,7 +61,6 @@ export function TasksTable({ promises }: TasksTableProps) {
     data,
     columns,
     pageCount,
-    enableAdvancedFilter,
     initialState: {
       sorting: [{ id: "createdAt", desc: true }],
       columnPinning: { right: ["actions"] },
@@ -78,31 +76,11 @@ export function TasksTable({ promises }: TasksTableProps) {
         table={table}
         actionBar={<TasksTableActionBar table={table} />}
       >
-        {enableAdvancedFilter ? (
-          <DataTableAdvancedToolbar table={table}>
-            <DataTableSortList table={table} align="start" />
-            {filterFlag === "advancedFilters" ? (
-              <DataTableFilterList
-                table={table}
-                shallow={shallow}
-                debounceMs={debounceMs}
-                throttleMs={throttleMs}
-                align="start"
-              />
-            ) : (
-              <DataTableFilterMenu
-                table={table}
-                shallow={shallow}
-                debounceMs={debounceMs}
-                throttleMs={throttleMs}
-              />
-            )}
-          </DataTableAdvancedToolbar>
-        ) : (
+
           <DataTableToolbar table={table}>
             <DataTableSortList table={table} align="end" />
           </DataTableToolbar>
-        )}
+
       </DataTable>
       <UpdateTaskSheet
         open={rowAction?.variant === "update"}

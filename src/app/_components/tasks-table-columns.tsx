@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { toast } from "sonner";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +54,32 @@ export function getTasksTableColumns({
   setRowAction,
 }: GetTasksTableColumnsProps): ColumnDef<Task>[] {
   return [
+    {
+      id: "expand",
+      header: () => (
+        <div className="sr-only">Toggle details</div>
+      ),
+      cell: ({ row }) => {
+        const isExpanded = row.getIsExpanded();
+    
+        return (
+          <button
+            onClick={() => row.toggleExpanded?.()}
+            aria-label={isExpanded ? "Collapse row" : "Expand row"}
+            className="p-2 flex items-center justify-center"
+          >
+            {isExpanded ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
+          </button>
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+      size: 40,
+    },
     {
       id: "select",
       header: ({ table }) => (

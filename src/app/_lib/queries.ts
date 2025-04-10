@@ -25,19 +25,8 @@ export async function getTasks(input: GetTasksSchema) {
     async () => {
       try {
         const offset = (input.page - 1) * input.perPage;
-        const advancedTable =
-          input.filterFlag === "advancedFilters" ||
-          input.filterFlag === "commandFilters";
 
-        const advancedWhere = filterColumns({
-          table: tasks,
-          filters: input.filters,
-          joinOperator: input.joinOperator,
-        });
-
-        const where = advancedTable
-          ? advancedWhere
-          : and(
+        const where = and(
               input.title ? ilike(tasks.title, `%${input.title}%`) : undefined,
               input.status.length > 0
                 ? inArray(tasks.status, input.status)
@@ -229,3 +218,25 @@ export async function getEstimatedHoursRange() {
     },
   )();
 }
+
+
+
+// {
+//   data: [
+//     {
+//       id: "task_1",
+//       title: "Fix login bug",
+//       status: "todo",
+//       priority: "high",
+//       createdAt: "2024-06-01T12:00:00Z"
+//     },
+//     {
+//       id: "task_2",
+//       title: "Design dashboard UI",
+//       status: "in-progress",
+//       priority: "medium",
+//       createdAt: "2024-06-02T14:00:00Z"
+//     }
+//   ],
+//   pageCount: 5
+// }

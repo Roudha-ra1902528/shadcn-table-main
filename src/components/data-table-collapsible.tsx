@@ -1,6 +1,10 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 
-export default function DataTableCollapsible() {
+interface DataTableCollapsibleProps {
+  row?: Task;
+}
+
+export default function DataTableCollapsible({ row }: DataTableCollapsibleProps) {
     const visitors = [
         {
           id: "user001",

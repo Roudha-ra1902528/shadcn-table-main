@@ -1,5 +1,5 @@
 import { type Table as TanstackTable, flexRender } from "@tanstack/react-table";
-import type * as React from "react";
+import * as React from "react";
 
 import { DataTablePagination } from "@/components/data-table-pagination";
 import {
@@ -40,60 +40,55 @@ export function DataTable<TData>({
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    style={{
-                      ...getCommonPinningStyles({ column: header.column }),
-                    }}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
+            {table.getHeaderGroups().map((headerGroup) => {
+              return (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    console.log("Header:", header);
+                    return (
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        style={{
+                          ...getCommonPinningStyles({ column: header.column }),
+                        }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <Collapsible key={row.id} asChild>
-                  <div className="contents border" data-state="open">
-                    <TableRow>
-                      <TableCell>
-                        <CollapsibleTrigger asChild>
-                          <div className="cursor-pointer p-2">▼</div>
-                        </CollapsibleTrigger>
+                <React.Fragment key={row.id}>
+                  <TableRow>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
+                    ))}
+                  </TableRow>
 
-                    {/* Important: new TableRow and cell that spans full width */}
-                    <CollapsibleContent asChild>
-                      <TableRow>
-                        <TableCell
-                          colSpan={table.getAllFlatColumns().length}
-                        >
-                          <DataTableCollapsible />
-                        </TableCell>
-                      </TableRow>
-                    </CollapsibleContent>
-                  </div>
-                </Collapsible>
+                  {row.getIsExpanded() && (
+                    <TableRow>
+                      <TableCell colSpan={table.getAllFlatColumns().length}>
+                        <DataTableCollapsible row={row.original} />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </React.Fragment>
               ))
             ) : (
               <TableRow>
